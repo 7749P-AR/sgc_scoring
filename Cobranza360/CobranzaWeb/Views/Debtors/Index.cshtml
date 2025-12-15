@@ -1,0 +1,192 @@
+@model IEnumerable<CobranzaWeb.Models.Debtor>
+
+@{
+    ViewData["Title"] = "Gestión de Cobranza";
+    var totalDebt = Model.Sum(d => d.MontoDeuda);
+    var highPriority = Model.Count(d => d.PrioridadCalculada == "Alta");
+    var mediumPriority = Model.Count(d => d.PrioridadCalculada == "Media");
+    var lowPriority = Model.Count(d => d.PrioridadCalculada == "Baja");
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CobranzaApp360</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">💼</div>
+                    <h1 class="app-title">CobranzaApp<span class="highlight">360</span></h1>
+                </div>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <div class="user-avatar">AG</div>
+                        <span class="user-name">Agente de Cobranza</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Statistics Dashboard -->
+            <div class="stats-grid">
+                <div class="stat-card stat-total">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Deudores</div>
+                        <div class="stat-value">@Model.Count()</div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-debt">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Deuda Total</div>
+                        <div class="stat-value">@totalDebt.ToString("C2")</div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-high">
+                    <div class="stat-icon">🔴</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Prioridad Alta</div>
+                        <div class="stat-value">@highPriority</div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-medium">
+                    <div class="stat-icon">🟡</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Prioridad Media</div>
+                        <div class="stat-value">@mediumPriority</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="control-panel">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Filtrar por prioridad:</label>
+                    <select id="priorityFilter" class="filter-select">
+                        <option value="">Todas</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Media">Media</option>
+                        <option value="Baja">Baja</option>
+                        <option value="Pendiente">Pendiente</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Estado:</label>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="Sin Contactar">Sin Contactar</option>
+                        <option value="Contactado">Contactado</option>
+                        <option value="En Proceso">En Proceso</option>
+                        <option value="Pagado">Pagado</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="error-message">
+                    <span class="error-icon">⚠️</span>
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <!-- Debtors Table -->
+            <div class="table-container">
+                <table class="debtors-table" id="debtorsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Monto Deuda</th>
+                            <th>Días Retraso</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var debtor in Model)
+                        {
+                            <tr class="debtor-row" data-priority="@debtor.PrioridadCalculada" data-status="@debtor.EstadoGestion">
+                                <td class="cell-id">@debtor.Id</td>
+                                <td class="cell-name">
+                                    <div class="name-container">
+                                        <span class="name-text">@debtor.Nombre</span>
+                                    </div>
+                                </td>
+                                <td class="cell-amount">
+                                    <span class="amount-value">@debtor.MontoDeuda.ToString("C2")</span>
+                                </td>
+                                <td class="cell-days">
+                                    <span class="days-badge @(debtor.DiasRetraso > 60 ? "days-critical" : debtor.DiasRetraso > 30 ? "days-warning" : "days-normal")">
+                                        @debtor.DiasRetraso días
+                                    </span>
+                                </td>
+                                <td class="cell-priority">
+                                    <span class="priority-badge @debtor.PriorityBadgeClass">
+                                        @debtor.PrioridadCalculada
+                                    </span>
+                                </td>
+                                <td class="cell-status">
+                                    <select class="status-select" data-debtor-id="@debtor.Id">
+                                        <option value="Sin Contactar" @(debtor.EstadoGestion == "Sin Contactar" ? "selected" : "")>Sin Contactar</option>
+                                        <option value="Contactado" @(debtor.EstadoGestion == "Contactado" ? "selected" : "")>Contactado</option>
+                                        <option value="En Proceso" @(debtor.EstadoGestion == "En Proceso" ? "selected" : "")>En Proceso</option>
+                                        <option value="Pagado" @(debtor.EstadoGestion == "Pagado" ? "selected" : "")>Pagado</option>
+                                    </select>
+                                </td>
+                                <td class="cell-actions">
+                                    <button class="action-btn btn-contact" title="Contactar">
+                                        📞
+                                    </button>
+                                    <button class="action-btn btn-info" title="Ver detalles">
+                                        ℹ️
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (!Model.Any())
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3>No hay deudores registrados</h3>
+                        <p>Ejecuta el script de Python para calcular las prioridades.</p>
+                    </div>
+                }
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2024 CobranzaApp360 - Sistema de Gestión de Cobranza</p>
+        </footer>
+    </div>
+
+    <script src="~/js/site.js"></script>
+</body>
+</html>
