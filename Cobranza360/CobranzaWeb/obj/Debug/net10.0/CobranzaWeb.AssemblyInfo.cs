@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CobranzaWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ca0914d8a10eb0d21d4a24f66f8300452202aa6")]
 [assembly: System.Reflection.AssemblyProductAttribute("CobranzaWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CobranzaWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

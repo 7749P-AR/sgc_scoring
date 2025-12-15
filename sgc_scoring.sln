@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cobranza360", "Cobranza360", "{447EBC22-DAC9-92ED-D626-F9BA01A2E49E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CobranzaWeb", "Cobranza360\CobranzaWeb\CobranzaWeb.csproj", "{9A574088-4DA4-599C-40BC-F18C4237A87F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A574088-4DA4-599C-40BC-F18C4237A87F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A574088-4DA4-599C-40BC-F18C4237A87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A574088-4DA4-599C-40BC-F18C4237A87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A574088-4DA4-599C-40BC-F18C4237A87F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A574088-4DA4-599C-40BC-F18C4237A87F} = {447EBC22-DAC9-92ED-D626-F9BA01A2E49E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98A0B17A-3B57-4595-BC50-FF7937BA458D}
+	EndGlobalSection
+EndGlobal
